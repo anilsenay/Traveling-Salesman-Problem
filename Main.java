@@ -32,7 +32,7 @@ public class Main {
                 else {
                     double x = Double.parseDouble(values[1]);
                     double y =  Double.parseDouble(values[2]);
-                    pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), x, y), oldID));
+                    pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), x, y), oldID, Integer.parseInt(values[0])));
                     oldID = Integer.parseInt(values[0]);
                     oldCity = new Point2D.Double(x, y);
                 }
@@ -40,22 +40,76 @@ public class Main {
                 cityCounter++;
             }
             Point2D startCity = new Point2D.Double(pathList.get(0).line.getX1(), pathList.get(0).line.getY1());
-            pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), startCity.getX(), startCity.getY()), oldID));
+            int startID = pathList.get(0).getPoint_1_id();
+            pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), startCity.getX(), startCity.getY()), oldID, startID));
 
             fr.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
-	}
-    public static void main(String args[]) throws IOException {
-        readFromFile("example-input-2.txt");
+    }
+    
+    static int calculateDistance() {
+        int sumOfLines = 0;
 
         for(int i = 0; i < cityCounter; i++){
-            System.out.println(pathList.get(i).getLineID() + " " 
-            + pathList.get(i).getLine().getP1().getX() + " " + pathList.get(i).getLine().getP1().getY() + " "
+            double x1 = pathList.get(i).getLine().getP1().getX();
+            double x2 = pathList.get(i).getLine().getP2().getX();
+            double y1 = pathList.get(i).getLine().getP1().getY();
+            double y2 = pathList.get(i).getLine().getP2().getY();
+
+            sumOfLines += (int)Math.round(Math.sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2)));
+        }
+
+        return sumOfLines;
+    }
+
+    static void switchToLines(int index_1, int index_2) {
+        Line Line1 = pathList.get(index_1);
+        Line Line2 = pathList.get(index_2);
+        double tempX = Line1.getX2();
+        double tempY = Line1.getY2();
+        int tempID = Line1.getPoint_2_id();
+        Line1.setLine((new Line2D.Double(Line1.getX1(), Line1.getY1(), Line2.getX1(), Line2.getY1())));
+        Line2.setLine((new Line2D.Double(tempX, tempY, Line2.getX2(), Line2.getY2())));
+        Line1.setPoint_2_id(Line2.getPoint_1_id());
+        Line2.setPoint_1_id(tempID);
+
+        reversePath(index_1+1, index_2-1);
+    }
+
+    static void reversePath(int index_1, int index_2){
+        //int middle = (int)Math.floor((index_1 + index_2) / 2.0) + 1;
+        while(index_1 < index_2){
+            Line tempLine = pathList.get(index_1);
+            pathList.set(index_1, pathList.get(index_2));
+            pathList.set(index_2, tempLine);
+            pathList.get(index_1).switchPoints();
+            pathList.get(index_2).switchPoints();
+            index_1++;
+            index_2--;
+        }
+        if(index_1 == index_2)
+            pathList.get(index_2).switchPoints();
+    }
+
+    static void printList() {
+        for(int i = 0; i < cityCounter; i++){
+            System.out.println(pathList.get(i).getPoint_1_id() + " " 
+            + pathList.get(i).getLine().getP1().getX() + " " + pathList.get(i).getLine().getP1().getY() + " || "
+            + pathList.get(i).getPoint_2_id() + " " 
             + pathList.get(i).getLine().getP2().getX() + " " + pathList.get(i).getLine().getP2().getY());
         }
+        System.out.println();
+    }
+
+    public static void main(String args[]) throws IOException {
+        readFromFile("test_input_very_small");
+
+        printList();
+        switchToLines(1, 3);
+        printList();
 
         Point2D test = new Point2D.Float(222,2);
         Point2D test2 = new Point2D.Float(2,2);
@@ -67,5 +121,8 @@ public class Main {
         System.out.println(line2.getX1());
 
         System.out.println("is intersect: " + (pathList.get(1).getLine().intersectsLine(pathList.get(2).getLine())));
+
+        System.out.println("Total path distance: " + calculateDistance());
+
     }
 }
