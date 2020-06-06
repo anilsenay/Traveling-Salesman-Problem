@@ -96,20 +96,21 @@ public class Main {
 
     static void printList() {
         for(int i = 0; i < cityCounter; i++){
-            System.out.println(pathList.get(i).getPoint_1_id() + " " 
-            + pathList.get(i).getLine().getP1().getX() + " " + pathList.get(i).getLine().getP1().getY() + " || "
-            + pathList.get(i).getPoint_2_id() + " " 
-            + pathList.get(i).getLine().getP2().getX() + " " + pathList.get(i).getLine().getP2().getY());
+            System.out.println(
+            + pathList.get(i).getPoint_1_id());
         }
         System.out.println();
     }
 
     public static void main(String args[]) throws IOException {
-        readFromFile("test_input_very_small");
+        readFromFile("example-input-3.txt");
 
-        printList();
-        switchToLines(1, 3);
-        printList();
+        // printList();
+        // System.out.println( calculateDistance());
+        // switchToLines(1, 3);
+        // printList();
+        // System.out.println( calculateDistance());
+
 
         Point2D test = new Point2D.Float(222,2);
         Point2D test2 = new Point2D.Float(2,2);
@@ -122,7 +123,30 @@ public class Main {
 
         System.out.println("is intersect: " + (pathList.get(1).getLine().intersectsLine(pathList.get(2).getLine())));
 
-        System.out.println("Total path distance: " + calculateDistance());
+        System.out.println(calculateDistance());
 
+        //printList();
+        int intersectCounter = 0;
+        for(int i = 0; i < cityCounter; i++){
+            //System.out.println("line i : " + i);
+            for(int j = i + 1; j < cityCounter; j++){
+                if(pathList.get(i).isIntersect(pathList.get(j))){
+                    //System.out.println("true");
+                    switchToLines(i, j);
+                    intersectCounter++;
+                }else{
+                    //System.out.println("false");
+                }
+            }
+            //printList();
+            //System.out.println("____________________ " + intersectCounter);
+            intersectCounter = 0;
+        }
+        //System.out.println("counter: " + intersectCounter);
+
+        System.out.println("Total path distance: " + calculateDistance());
+        
     }
 }
+
+// Optimal Values --> Input-1 : 108159 , Input-2 : 2579 , Input-3 : 1573084

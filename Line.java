@@ -5,7 +5,7 @@ public class Line {
     int point_2_id;
     Line2D line;
 
-    public Line(Line2D line, int id_1, int id_2){
+    public Line(Line2D line, int id_1, int id_2) {
         this.point_1_id = id_1;
         this.line = line;
         this.point_2_id = id_2;
@@ -38,12 +38,15 @@ public class Line {
     public double getX1() {
         return line.getX1();
     }
+
     public double getY1() {
         return line.getY1();
     }
+
     public double getX2() {
         return line.getX2();
     }
+
     public double getY2() {
         return line.getY2();
     }
@@ -54,5 +57,16 @@ public class Line {
         this.point_2_id = tempID;
 
         this.line = new Line2D.Double(line.getX2(), line.getY2(), line.getX1(), line.getY1());
+    }
+
+    public boolean isIntersect(Line line) {
+
+        if (this.point_1_id != line.getPoint_1_id() && this.point_1_id != line.getPoint_2_id()
+        && this.point_2_id != line.getPoint_1_id() && this.point_2_id != line.getPoint_2_id()) {
+                if(line.getLine().intersectsLine(this.getLine()))
+                    return true;
+            return false;
+        } else
+            return false;
     }
 }
