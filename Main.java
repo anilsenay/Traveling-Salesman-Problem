@@ -102,8 +102,19 @@ public class Main {
         System.out.println();
     }
 
+    static boolean isAnyIntersect(){
+        for(int i = 0; i < cityCounter; i++){
+            for(int j = i + 1; j < cityCounter; j++){
+                if(pathList.get(i).isIntersect(pathList.get(j))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void main(String args[]) throws IOException {
-        readFromFile("example-input-3.txt");
+        readFromFile("example-input-2.txt");
 
         // printList();
         // System.out.println( calculateDistance());
@@ -112,18 +123,18 @@ public class Main {
         // System.out.println( calculateDistance());
 
 
-        Point2D test = new Point2D.Float(222,2);
-        Point2D test2 = new Point2D.Float(2,2);
-        Line2D line = new Line2D.Float(0, 0, 2, 0);
-        Line2D line2 = new Line2D.Float(0, 1, 2, 1);
-        System.out.println(line.intersectsLine(line2));
-        System.out.println(test.distance(test2));
-        line2.setLine(test, test2);
-        System.out.println(line2.getX1());
+        // Point2D test = new Point2D.Float(222,2);
+        // Point2D test2 = new Point2D.Float(2,2);
+        // Line2D line = new Line2D.Float(0, 0, 2, 0);
+        // Line2D line2 = new Line2D.Float(0, 1, 2, 1);
+        // System.out.println(line.intersectsLine(line2));
+        // System.out.println(test.distance(test2));
+        // line2.setLine(test, test2);
+        // System.out.println(line2.getX1());
 
-        System.out.println("is intersect: " + (pathList.get(1).getLine().intersectsLine(pathList.get(2).getLine())));
+        // System.out.println("is intersect: " + (pathList.get(1).getLine().intersectsLine(pathList.get(2).getLine())));
 
-        System.out.println(calculateDistance());
+        // System.out.println(calculateDistance());
 
         //printList();
         int intersectCounter = 0;
@@ -144,8 +155,8 @@ public class Main {
         }
         //System.out.println("counter: " + intersectCounter);
 
-        System.out.println("Total path distance: " + calculateDistance());
-        
+        System.out.println(calculateDistance());
+        printList();
     }
 }
 
