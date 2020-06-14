@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
@@ -19,35 +21,76 @@ public class Main {
             while((line=br.readLine())!=null){
 
                 String[] values = line.replaceAll("[ ]+", " ").trim().split(" ");
+                Point2D point = new Point2D.Double(Double.parseDouble(values[1]),Double.parseDouble(values[2]));
+                cityList.add(new City(Integer.parseInt(values[0]), point));
+                
                 // int id = Integer.parseInt(values[0]);
                 // // double x = Double.parseDouble(values[1]);
                 // // double y = Double.parseDouble(values[2]);
 
                 // cityList.add(new City(id, new Point2D.Double(Double.parseDouble(values[1]), Double.parseDouble(values[2]))));
 
-                if(oldID == -1){
-                    oldID = Integer.parseInt(values[0]);
-                    oldCity = new Point2D.Double(Double.parseDouble(values[1]), Double.parseDouble(values[2]));
-                } 
-                else {
-                    double x = Double.parseDouble(values[1]);
-                    double y =  Double.parseDouble(values[2]);
-                    pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), x, y), oldID, Integer.parseInt(values[0])));
-                    oldID = Integer.parseInt(values[0]);
-                    oldCity = new Point2D.Double(x, y);
-                }
+                // if(oldID == -1){
+                //     oldID = Integer.parseInt(values[0]);
+                //     oldCity = new Point2D.Double(Double.parseDouble(values[1]), Double.parseDouble(values[2]));
+                // } 
+                // else {
+                //     double x = Double.parseDouble(values[1]);
+                //     double y =  Double.parseDouble(values[2]);
+                //     pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), x, y), oldID, Integer.parseInt(values[0])));
+                //     oldID = Integer.parseInt(values[0]);
+                //     oldCity = new Point2D.Double(x, y);
+                // }
 
                 cityCounter++;
             }
-            Point2D startCity = new Point2D.Double(pathList.get(0).line.getX1(), pathList.get(0).line.getY1());
-            int startID = pathList.get(0).getPoint_1_id();
-            pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), startCity.getX(), startCity.getY()), oldID, startID));
+            // Point2D startCity = new Point2D.Double(pathList.get(0).line.getX1(), pathList.get(0).line.getY1());
+            // int startID = pathList.get(0).getPoint_1_id();
+            // pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), startCity.getX(), startCity.getY()), oldID, startID));
 
             fr.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
+    }
+
+    public static void nearestNeighbor(){
+        int cityNumber = cityList.size();
+        for(int i = 0; i < cityNumber - 1; i++){
+            double minDistance = Integer.MAX_VALUE;
+            int minCityIndex = i + 1;
+            for(int j = i + 1; j < cityNumber; j++){
+                if(cityList.get(i).getPoint().distance(cityList.get(j).getPoint()) < minDistance){
+                    minDistance = cityList.get(i).getPoint().distance(cityList.get(j).getPoint());
+                    minCityIndex = j;
+                }
+            }
+            Collections.swap(cityList, i + 1, minCityIndex);
+        }
+    }
+
+    public static void lineListCreate() {
+        int cityNumber = cityList.size();
+        for(int i = 0; i < cityNumber - 1; i++){
+            double x_1 = cityList.get(i).getPoint().getX();
+            double y_1 = cityList.get(i).getPoint().getY();
+            double x_2 = cityList.get(i+1).getPoint().getX();
+            double y_2 = cityList.get(i+1).getPoint().getY();
+
+            int ID_1 = cityList.get(i).id;
+            int ID_2 = cityList.get(i+1).id;
+
+            pathList.add(new Line(new Line2D.Double(x_1, y_1, x_2, y_2), ID_1, ID_2));
+        }
+        // create last line with first and last point
+        pathList.add(new Line(new Line2D.Double(
+            cityList.get(cityNumber-1).getPoint().getX(), 
+            cityList.get(cityNumber-1).getPoint().getY(), 
+            cityList.get(0).getPoint().getX(), 
+            cityList.get(0).getPoint().getY()), 
+            cityList.get(cityNumber-1).getId(), 
+            cityList.get(0).getId()));
     }
     
     static int calculateDistance() {
@@ -96,8 +139,14 @@ public class Main {
 
     static void printList() {
         for(int i = 0; i < cityCounter; i++){
-            System.out.println(
-            + pathList.get(i).getPoint_1_id());
+            System.out.println(pathList.get(i).getPoint_1_id());
+        }
+        System.out.println();
+    }
+
+    static void printPoints() {
+        for(int i = 0; i < cityCounter; i++){
+            System.out.println(pathList.get(i).getX1() + " " + pathList.get(i).getY1());
         }
         System.out.println();
     }
@@ -113,8 +162,31 @@ public class Main {
         return false;
     }
 
+    public static void twoOpt(){
+        for(int i = 0; i < cityCounter; i++){
+            int i_length = pathList.get(i).lineLength();
+            for(int j = i + 1; j < cityCounter; j++){
+                int j_length = pathList.get(j).lineLength();
+
+                Line Line1 = new Line(new Line2D.Double(pathList.get(i).getX1(), pathList.get(i).getY1(), pathList.get(j).getX1(), pathList.get(j).getY1()), 0,0);
+                Line Line2 = new Line(new Line2D.Double(pathList.get(i).getX2(), pathList.get(i).getY2(), pathList.get(j).getX2(), pathList.get(j).getY2()), 0,0);
+
+                int line1_length = Line1.lineLength();
+                int line2_length = Line2.lineLength();
+                
+
+                if(i_length + j_length >= line1_length + line2_length){
+                    switchToLines(i, j);
+                }
+            }
+        }
+    }
+
     public static void main(String args[]) throws IOException {
-        readFromFile("example-input-2.txt");
+        readFromFile("example-input-3.txt");
+
+        nearestNeighbor();
+        lineListCreate();
 
         // printList();
         // System.out.println( calculateDistance());
@@ -138,25 +210,14 @@ public class Main {
 
         //printList();
         int intersectCounter = 0;
-        for(int i = 0; i < cityCounter; i++){
-            //System.out.println("line i : " + i);
-            for(int j = i + 1; j < cityCounter; j++){
-                if(pathList.get(i).isIntersect(pathList.get(j))){
-                    //System.out.println("true");
-                    switchToLines(i, j);
-                    intersectCounter++;
-                }else{
-                    //System.out.println("false");
-                }
-            }
-            //printList();
-            //System.out.println("____________________ " + intersectCounter);
-            intersectCounter = 0;
+        
+        for(int k = 0; k < 50; k++){
+            twoOpt();
         }
         //System.out.println("counter: " + intersectCounter);
-
         System.out.println(calculateDistance());
-        printList();
+        // printList();
+        // printPoints();
     }
 }
 

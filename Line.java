@@ -69,4 +69,14 @@ public class Line {
         } else
             return false;
     }
+
+    public int lineLength(){
+
+        double x1 = this.line.getX1();
+        double x2 = this.line.getX2();
+        double y1 = this.line.getY1();
+        double y2 = this.line.getY2();
+
+        return (int)Math.round(Math.sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2)));
+    }
 }
