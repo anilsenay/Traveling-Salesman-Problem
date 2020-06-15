@@ -70,6 +70,31 @@ public class Main {
         }
     }
 
+    public static void randomizedNearestNeighbor(){
+        int cityNumber = cityList.size();
+        for(int i = 0; i < cityNumber - 1; i++){
+            double minDistance = Integer.MAX_VALUE;
+            double minDistances[] = {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
+            int minCityIndex = i + 1;
+            int minIndexs[] = new int[3];
+            for(int j = i + 1; j < cityNumber; j++){
+
+                if(cityList.get(i).getPoint().distance(cityList.get(j).getPoint()) < minDistances[0]){
+                    minDistances[0] = cityList.get(i).getPoint().distance(cityList.get(j).getPoint());
+                    minIndexs[0] = j;
+                } else if(cityList.get(i).getPoint().distance(cityList.get(j).getPoint()) < minDistances[1]){
+                    minDistances[1] = cityList.get(i).getPoint().distance(cityList.get(j).getPoint());
+                    minIndexs[1] = j;
+                } else if(cityList.get(i).getPoint().distance(cityList.get(j).getPoint()) < minDistances[2]){
+                    minDistances[2] = cityList.get(i).getPoint().distance(cityList.get(j).getPoint());
+                    minIndexs[2] = j;
+                }
+
+            }
+            Collections.swap(cityList, i + 1, minIndexs[(int)(Math.random()*3)]);
+        }
+    }
+
     public static void lineListCreate() {
         int cityNumber = cityList.size();
         for(int i = 0; i < cityNumber - 1; i++){
@@ -175,7 +200,7 @@ public class Main {
                 int line2_length = Line2.lineLength();
                 
 
-                if(i_length + j_length >= line1_length + line2_length){
+                if(i_length + j_length > line1_length + line2_length){
                     switchToLines(i, j);
                 }
             }
@@ -183,9 +208,9 @@ public class Main {
     }
 
     public static void main(String args[]) throws IOException {
-        readFromFile("example-input-3.txt");
+        readFromFile("example-input-1.txt");
 
-        nearestNeighbor();
+        randomizedNearestNeighbor();
         lineListCreate();
 
         // printList();
@@ -210,13 +235,24 @@ public class Main {
 
         //printList();
         int intersectCounter = 0;
-        
+
+        int calculatedDistance = Integer.MAX_VALUE;
+
+        // twoOpt(); // run at least once before while loop
+        // while(calculatedDistance > calculateDistance()){
+        //     calculatedDistance = calculateDistance();
+        //     twoOpt();
+        // }
+
         for(int k = 0; k < 50; k++){
             twoOpt();
+            System.out.println(calculateDistance());
+
         }
         //System.out.println("counter: " + intersectCounter);
         System.out.println(calculateDistance());
-        // printList();
+        printList();
+        System.out.println(calculateDistance());
         // printPoints();
     }
 }
