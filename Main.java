@@ -178,7 +178,7 @@ public class Main {
 
     static void isBetterFromFile() throws IOException {
         try{
-            File file=new File("test-output-2.txt");
+            File file=new File("test-output-22.txt");
             FileReader fr=new FileReader(file);
             BufferedReader br=new BufferedReader(fr);
             String line;
@@ -195,7 +195,7 @@ public class Main {
 		}
     }
     static void printToFile() throws IOException {
-        FileWriter fileWriter = new FileWriter("test-output-2.txt");
+        FileWriter fileWriter = new FileWriter("test-output-22.txt");
         String output = "";
         output += calculateDistance() + "\n";
         for(int i = 0; i < cityCounter; i++){
@@ -239,54 +239,23 @@ public class Main {
 
     public static void main(String args[]) throws IOException {
         
-        readFromFile("test_inputs/test-input-2.txt");
+        for(int index = 0; index < 10000; index++){
+            readFromFile("test_inputs/test-input-2.txt");
+            randomizedNearestNeighbor();
+            lineListCreate();
 
-        //nearestNeighbor();
-        randomizedNearestNeighbor();
-        lineListCreate();
+            for(int k = 0; k < 50; k++){
+                twoOpt();
+            }
 
-        // printList();
-        // System.out.println( calculateDistance());
-        // switchToLines(1, 3);
-        // printList();
-        // System.out.println( calculateDistance());
+            isBetterFromFile();
 
-
-        // Point2D test = new Point2D.Float(222,2);
-        // Point2D test2 = new Point2D.Float(2,2);
-        // Line2D line = new Line2D.Float(0, 0, 2, 0);
-        // Line2D line2 = new Line2D.Float(0, 1, 2, 1);
-        // System.out.println(line.intersectsLine(line2));
-        // System.out.println(test.distance(test2));
-        // line2.setLine(test, test2);
-        // System.out.println(line2.getX1());
-
-        // System.out.println("is intersect: " + (pathList.get(1).getLine().intersectsLine(pathList.get(2).getLine())));
-
-        // System.out.println(calculateDistance());
-
-        //printList();
-        int intersectCounter = 0;
-
-        int calculatedDistance = Integer.MAX_VALUE;
-
-        // twoOpt(); // run at least once before while loop
-        // while(calculatedDistance > calculateDistance()){
-        //     calculatedDistance = calculateDistance();
-        //     twoOpt();
-        // }
-
-        for(int k = 0; k < 50; k++){
-            twoOpt();
-            //System.out.println(calculateDistance());
-
+            cityList.clear();
+            pathList.clear();
+            cityCounter = 0;
+            Runtime.getRuntime().gc(); 
         }
-        //System.out.println("counter: " + intersectCounter);
-        // System.out.println(calculateDistance());
-        // printList();
-        isBetterFromFile();
-        //System.out.println(calculateDistance());
-        // printPoints();
+        
     }
 }
 
