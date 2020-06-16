@@ -176,6 +176,36 @@ public class Main {
         System.out.println();
     }
 
+    static void isBetterFromFile() throws IOException {
+        try{
+            File file=new File("test-output-2.txt");
+            FileReader fr=new FileReader(file);
+            BufferedReader br=new BufferedReader(fr);
+            String line;
+            if((line = br.readLine()) != null){
+                if(Integer.parseInt(line) > calculateDistance()){
+                    printToFile();
+                }
+            }
+            fr.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+    }
+    static void printToFile() throws IOException {
+        FileWriter fileWriter = new FileWriter("test-output-2.txt");
+        String output = "";
+        output += calculateDistance() + "\n";
+        for(int i = 0; i < cityCounter; i++){
+           output += (pathList.get(i).getPoint_1_id()) + "\n";
+        }
+        
+        fileWriter.write(output);
+        fileWriter.close();
+    }
+
     static boolean isAnyIntersect(){
         for(int i = 0; i < cityCounter; i++){
             for(int j = i + 1; j < cityCounter; j++){
@@ -208,8 +238,10 @@ public class Main {
     }
 
     public static void main(String args[]) throws IOException {
-        readFromFile("example-input-1.txt");
+        
+        readFromFile("test_inputs/test-input-2.txt");
 
+        //nearestNeighbor();
         randomizedNearestNeighbor();
         lineListCreate();
 
@@ -246,13 +278,14 @@ public class Main {
 
         for(int k = 0; k < 50; k++){
             twoOpt();
-            System.out.println(calculateDistance());
+            //System.out.println(calculateDistance());
 
         }
         //System.out.println("counter: " + intersectCounter);
-        System.out.println(calculateDistance());
-        printList();
-        System.out.println(calculateDistance());
+        // System.out.println(calculateDistance());
+        // printList();
+        isBetterFromFile();
+        //System.out.println(calculateDistance());
         // printPoints();
     }
 }
