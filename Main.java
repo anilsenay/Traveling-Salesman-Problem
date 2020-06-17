@@ -186,6 +186,11 @@ public class Main {
 
     public static void main(String args[]) throws IOException {
 
+        if(args.length != 2){
+            System.out.println("You should run program as >java Main {inputfile} {outputfile}");
+            System.exit(0);
+        }
+
         // read from input and create City objects
         readFromFile(args[0]);
 
