@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -16,37 +15,15 @@ public class Main {
             FileReader fr=new FileReader(file);
             BufferedReader br=new BufferedReader(fr);
             String line;
-            int oldID = -1;
-            Point2D oldCity = null;
+
             while((line=br.readLine())!=null){
 
                 String[] values = line.replaceAll("[ ]+", " ").trim().split(" ");
                 Point2D point = new Point2D.Double(Double.parseDouble(values[1]),Double.parseDouble(values[2]));
                 cityList.add(new City(Integer.parseInt(values[0]), point));
                 
-                // int id = Integer.parseInt(values[0]);
-                // // double x = Double.parseDouble(values[1]);
-                // // double y = Double.parseDouble(values[2]);
-
-                // cityList.add(new City(id, new Point2D.Double(Double.parseDouble(values[1]), Double.parseDouble(values[2]))));
-
-                // if(oldID == -1){
-                //     oldID = Integer.parseInt(values[0]);
-                //     oldCity = new Point2D.Double(Double.parseDouble(values[1]), Double.parseDouble(values[2]));
-                // } 
-                // else {
-                //     double x = Double.parseDouble(values[1]);
-                //     double y =  Double.parseDouble(values[2]);
-                //     pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), x, y), oldID, Integer.parseInt(values[0])));
-                //     oldID = Integer.parseInt(values[0]);
-                //     oldCity = new Point2D.Double(x, y);
-                // }
-
                 cityCounter++;
             }
-            // Point2D startCity = new Point2D.Double(pathList.get(0).line.getX1(), pathList.get(0).line.getY1());
-            // int startID = pathList.get(0).getPoint_1_id();
-            // pathList.add(new Line(new Line2D.Double(oldCity.getX(), oldCity.getY(), startCity.getX(), startCity.getY()), oldID, startID));
 
             fr.close();
 		} catch (FileNotFoundException e) {
@@ -55,6 +32,7 @@ public class Main {
 		}
     }
 
+    // we are not using this function anymore, we use randomizedNearestNeighbor now
     public static void nearestNeighbor(){
         int cityNumber = cityList.size();
         for(int i = 0; i < cityNumber - 1; i++){
@@ -70,12 +48,11 @@ public class Main {
         }
     }
 
+    // get nearest 3 cities and choose one of them randomly. So on every run, it will give different results. 
     public static void randomizedNearestNeighbor(){
         int cityNumber = cityList.size();
         for(int i = 0; i < cityNumber - 1; i++){
-            double minDistance = Integer.MAX_VALUE;
             double minDistances[] = {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
-            int minCityIndex = i + 1;
             int minIndexs[] = new int[3];
             for(int j = i + 1; j < cityNumber; j++){
 
@@ -148,7 +125,6 @@ public class Main {
     }
 
     static void reversePath(int index_1, int index_2){
-        //int middle = (int)Math.floor((index_1 + index_2) / 2.0) + 1;
         while(index_1 < index_2){
             Line tempLine = pathList.get(index_1);
             pathList.set(index_1, pathList.get(index_2));
@@ -176,26 +152,8 @@ public class Main {
         System.out.println();
     }
 
-    static void isBetterFromFile() throws IOException {
-        try{
-            File file=new File("test-output-22.txt");
-            FileReader fr=new FileReader(file);
-            BufferedReader br=new BufferedReader(fr);
-            String line;
-            if((line = br.readLine()) != null){
-                if(Integer.parseInt(line) > calculateDistance()){
-                    printToFile();
-                }
-            }
-            fr.close();
-
-		} catch (FileNotFoundException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
-    }
-    static void printToFile() throws IOException {
-        FileWriter fileWriter = new FileWriter("test-output-22.txt");
+    static void printToFile(String filename) throws IOException {
+        FileWriter fileWriter = new FileWriter(filename);
         String output = "";
         output += calculateDistance() + "\n";
         for(int i = 0; i < cityCounter; i++){
@@ -204,17 +162,6 @@ public class Main {
         
         fileWriter.write(output);
         fileWriter.close();
-    }
-
-    static boolean isAnyIntersect(){
-        for(int i = 0; i < cityCounter; i++){
-            for(int j = i + 1; j < cityCounter; j++){
-                if(pathList.get(i).isIntersect(pathList.get(j))){
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static void twoOpt(){
@@ -238,25 +185,27 @@ public class Main {
     }
 
     public static void main(String args[]) throws IOException {
-        
-        for(int index = 0; index < 10000; index++){
-            readFromFile("test_inputs/test-input-2.txt");
-            randomizedNearestNeighbor();
-            lineListCreate();
 
-            for(int k = 0; k < 50; k++){
-                twoOpt();
-            }
-
-            isBetterFromFile();
-
-            cityList.clear();
-            pathList.clear();
-            cityCounter = 0;
-            Runtime.getRuntime().gc(); 
+        if(args.length != 2){
+            System.out.println("You should run program as >java Main {inputfile} {outputfile}");
+            System.exit(0);
         }
-        
+
+        // read from input and create City objects
+        readFromFile(args[0]);
+
+        // apply randomized nearest neighbor algorithm to cityList
+        randomizedNearestNeighbor();
+
+        // creating lines from cityList objects
+        lineListCreate();
+
+        // running two opt 50 times, gave better results in our experiments.
+        for(int k = 0; k < 50; k++){
+            twoOpt();
+        }
+
+        //print
+        printToFile(args[1]);
     }
 }
-
-// Optimal Values --> Input-1 : 108159 , Input-2 : 2579 , Input-3 : 1573084
