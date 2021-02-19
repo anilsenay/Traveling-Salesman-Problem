@@ -11,3 +11,5 @@ The nearest neighbor algorithm was one of the first algorithms used to solve the
 ### 2-Opt Optimization Algorithm
 
 The 2-opt algorithm is a local search algorithm probably the most basic and widely used algorithm for solving Traveling Salesman Problems. Basically, it can be defined as deleting the two edges in the tour and connecting the tour, which is divided into two parts, in a way that reduces length of the tour.
+
+A complete 2-opt local search will compare every possible valid combination of the swapping mechanism. This technique can be applied to the travelling salesman problem as well as many related problems.
