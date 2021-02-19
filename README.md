@@ -22,7 +22,7 @@ We observed that if we run the 2-opt optimization more times, we get better resu
 
 We use test-input-1.txt (280 cities) as example input for visualization process to understand better how Randomized Nearest Neighbors Algorithm and 2-Opt Optimization Algorithm works.
 
-Before RNN Algorithm       |  After RNN Algortihm      | Final Result After 2-Opt Algorithm
+Before RNN Algorithm       |  After RNN Algorithm      | Final Result After 2-Opt Algorithm
 :-------------------------:|:-------------------------:| :-------------------------: 
 ![](https://i.ibb.co/1sTm1Gw/Screenshot-20210219-125643.png)   |  ![](https://i.ibb.co/gtv3Rtm/Screenshot-20210219-125706.png)  | ![](https://i.ibb.co/ckDddWQ/Screenshot-20210219-125739.png)
  
