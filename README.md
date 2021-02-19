@@ -17,3 +17,5 @@ A complete 2-opt local search will compare every possible valid combination of t
 ### Optimization Notes
 
 We observed that if we run the 2-opt optimization more times, we get better results. So, we decided to run 2-opt algorithm approximately 50 times to get a better tour.
+
+### Visualization of Data’s
