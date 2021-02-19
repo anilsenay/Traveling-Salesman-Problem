@@ -19,3 +19,5 @@ A complete 2-opt local search will compare every possible valid combination of t
 We observed that if we run the 2-opt optimization more times, we get better results. So, we decided to run 2-opt algorithm approximately 50 times to get a better tour.
 
 ### Visualization of Data’s
+
+We use test-input-1.txt (280 cities) as example input for visualization process to understand better how Randomized Nearest Neighbors Algorithm and 2-Opt Optimization Algorithm works.
