@@ -25,5 +25,5 @@ We use test-input-1.txt (280 cities) as example input for visualization process 
 <h3> Before RNN Algorithm </h3>
 <img src="https://i.ibb.co/FxM31j4/Screenshot-20210219-125643.png" data-canonical-src="https://i.ibb.co/FxM31j4/Screenshot-20210219-125643.png" align=left width = 450/>
 
-<h3 align=right> After RNN Algorithm </h3>
-<img src="https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png" data-canonical-src="https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png" align=right width = 450/>
+<h3> After RNN Algorithm </h3>
+<img src="https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png" data-canonical-src="https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png" align=left width = 450/>
