@@ -24,5 +24,5 @@ We use test-input-1.txt (280 cities) as example input for visualization process 
 
 Before RNN Algorithm       |  After RNN Algortihm      | Final Result After 2-Opt Algorithm
 :-------------------------:|:-------------------------:| :-------------------------: 
-![](https://i.ibb.co/1sTm1Gw/Screenshot-20210219-125643.png)   |  ![](https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png)  | ![](https://i.ibb.co/tcbSbd3/Screenshot-20210219-125739.png)
+![](https://i.ibb.co/1sTm1Gw/Screenshot-20210219-125643.png)   |  ![](https://i.ibb.co/1KxKmKR/Screenshot-20210219-125706.png)  | ![](https://i.ibb.co/ckDddWQ/Screenshot-20210219-125739.png)
  
